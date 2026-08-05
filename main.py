@@ -1,12 +1,18 @@
 
 from src.analysis.analysis import overview, fare, time, vendor, business_insights
+from src.transformations.transformation import transform_data
 
+## Analysis
 
 # overview()
 # fare()
 # time()
 # vendor()
-business_insights()
+# business_insights()
+
+## Transformation 
+
+transform_data()
 
 
 # import streamlit as st
