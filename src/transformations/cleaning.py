@@ -1,6 +1,6 @@
 import polars as pl
 
-from src.config import RAW_DATA, PROCESSED_DIR
+from src.config import RAW_DATA, CLEANED_DIR
 
 
 def clean_data():
@@ -26,7 +26,7 @@ def clean_data():
     )
 
     # Save cleaned parquet
-    df.write_parquet(PROCESSED_DIR)
+    df.write_parquet(CLEANED_DIR)
 
     cleaned_rows = df.height
 

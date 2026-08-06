@@ -1,10 +1,12 @@
-from src.database import connection
+from src.database import get_connection
 from src.config import RAW_DATA
 
 parquet_file_pat = str(RAW_DATA)
 
+con = get_connection()
+
 def business_overview():
-    payment_type_stats = connection.execute("""
+    payment_type_stats = con.execute("""
     SELECT
         payment_type,
         COUNT(*) AS total_trips,
@@ -14,7 +16,7 @@ def business_overview():
     GROUP BY payment_type;
 """,[parquet_file_pat]).pl()
     
-    most_common_pu_location = connection.execute("""
+    most_common_pu_location = con.execute("""
     SELECT PULocationID, COUNT(*) as total_trips
     FROM read_parquet(?)
     GROUP BY PULocationID
@@ -22,7 +24,7 @@ def business_overview():
     LIMIT 20;
 """,[parquet_file_pat]).pl()
     
-    most_common_do_location = connection.execute("""
+    most_common_do_location = con.execute("""
     SELECT DOLocationID, COUNT(*) as total_trips
     FROM read_parquet(?)
     GROUP BY DOLocationID
@@ -30,7 +32,7 @@ def business_overview():
     LIMIT 20;
 """,[parquet_file_pat]).pl()
 
-    airport_vs_non_airport_trips = connection.execute("""
+    airport_vs_non_airport_trips = con.execute("""
     SELECT COUNT(*) AS total_trips,
         CASE
          WHEN Airport_fee != 0 THEN 'Airport Trip'
@@ -40,13 +42,15 @@ def business_overview():
     GROUP BY is_airport_trip;
 """,[parquet_file_pat]).pl()
 
-    highest_revenue_location = connection.execute("""
+    highest_revenue_location = con.execute("""
     SELECT PULocationID, SUM(total_amount) AS total_revenue
     FROM read_parquet(?)
     GROUP BY PULocationID
     ORDER BY total_revenue DESC
     LIMIT 1;
 """,[parquet_file_pat]).pl()
+
+    con.close()
 
     return{
         "payment_type_stats": payment_type_stats,

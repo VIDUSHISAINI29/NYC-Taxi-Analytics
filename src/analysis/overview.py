@@ -1,9 +1,9 @@
-import duckdb as db
-
-con = db.connect()
 from src.config import RAW_DATA
+from src.database import get_connection
 
 parquet_file = str(RAW_DATA)
+get_connection
+con = get_connection()
 
 def dataset_overview():
 # total rows

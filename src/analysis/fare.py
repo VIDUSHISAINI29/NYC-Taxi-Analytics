@@ -1,10 +1,9 @@
-import duckdb as db
-
-con = db.connect()
+from src.database import get_connection
 
 from src.config import RAW_DATA
 
 parquet_file = str(RAW_DATA)
+con = get_connection()
 
 def fare_analysis():
     fare_data = con.execute("""
@@ -16,6 +15,10 @@ def fare_analysis():
     STDDEV(fare_amount) AS stddev_fare,
 FROM read_parquet(?)
 """, [parquet_file]).fetchone()
+
+
+    con.close()
+     
     return{
         "average_fare": fare_data[0],
         "median_fare": fare_data[1],

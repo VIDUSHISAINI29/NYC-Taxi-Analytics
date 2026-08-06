@@ -1,3 +1,5 @@
-import duckdb as db
+import duckdb
 
-connection = db.connect()
+
+def get_connection():
+    return duckdb.connect()

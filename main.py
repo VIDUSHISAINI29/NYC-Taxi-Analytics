@@ -1,18 +1,71 @@
 
 from src.analysis.analysis import overview, fare, time, vendor, business_insights
-from src.transformations.transformation import transform_data
+from src.transformations.transformation import transform_data, feature_data
+from src.validation.validation import validate_dataset
+
 
 ## Analysis
-
-# overview()
-# fare()
-# time()
-# vendor()
-# business_insights()
+def analysis():
+    """
+    Perform data analysis and generate insights.
+    """
+    print("Starting Data Analysis...")
+    overview()
+    fare()
+    time()
+    vendor()
+    business_insights()
 
 ## Transformation 
 
-transform_data()
+def transformation():
+    """
+    Perform data transformation including cleaning and feature engineering.
+    """
+    print("Starting Data Transformation...")
+    transform_data()
+    feature_data()
+
+
+## Validation
+
+def validation():
+    """
+    Validate the processed dataset.
+    """
+
+    print("Starting Data Validation...")
+    validation_results = validate_dataset()
+    print(validation_results) 
+
+
+# # MAIN 
+
+def main():
+    """
+    Main function to run the data analysis, transformation, and validation.
+    """
+    analysis()
+    transformation()
+    validation()
+
+
+
+main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # import streamlit as st

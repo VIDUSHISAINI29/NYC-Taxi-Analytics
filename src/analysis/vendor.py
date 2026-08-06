@@ -1,10 +1,13 @@
-from src.database import connection
+from src.database import get_connection
+
 from src.config import RAW_DATA
 
 parquet_file_path = str(RAW_DATA)
 
+con = get_connection()
+
 def vendor_analysis():
-    vendor_stats =  connection.execute("""
+    vendor_stats =  con.execute("""
     SELECT 
         COUNT(*) AS total_trips, 
         VendorID,
@@ -15,7 +18,10 @@ def vendor_analysis():
         ROUND(SUM(total_amount),2) AS total_revenue
       FROM read_parquet(?)
     GROUP BY VendorID
-    ORDER BY VendorID DESC
+    ORDER BY VendorID DESC;
 """,[parquet_file_path]).pl()
+
+    con.close()
+    
 
     return vendor_stats
