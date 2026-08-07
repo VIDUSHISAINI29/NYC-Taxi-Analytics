@@ -1,8 +1,8 @@
 from src.database import get_connection
 
-from src.config import RAW_DATA
+from src.config import FEATURED_DIR
 
-parquet_file = str(RAW_DATA)
+parquet_file = str(FEATURED_DIR)
 con = get_connection()
 
 def fare_analysis():

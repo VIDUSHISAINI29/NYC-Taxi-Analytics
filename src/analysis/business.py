@@ -1,7 +1,7 @@
 from src.database import get_connection
 from src.config import RAW_DATA
 
-parquet_file_pat = str(RAW_DATA)
+parquet_file_path = str(RAW_DATA)
 
 con = get_connection()
 
@@ -14,7 +14,7 @@ def business_overview():
         ROUND(AVG(tip_amount), 2) AS average_tip,
       FROM read_parquet(?)
     GROUP BY payment_type;
-""",[parquet_file_pat]).pl()
+""",[parquet_file_path]).pl()
     
     most_common_pu_location = con.execute("""
     SELECT PULocationID, COUNT(*) as total_trips
@@ -22,7 +22,7 @@ def business_overview():
     GROUP BY PULocationID
     ORDER BY total_trips DESC
     LIMIT 20;
-""",[parquet_file_pat]).pl()
+""",[parquet_file_path]).pl()
     
     most_common_do_location = con.execute("""
     SELECT DOLocationID, COUNT(*) as total_trips
@@ -30,7 +30,7 @@ def business_overview():
     GROUP BY DOLocationID
     ORDER BY total_trips DESC
     LIMIT 20;
-""",[parquet_file_pat]).pl()
+""",[parquet_file_path]).pl()
 
     airport_vs_non_airport_trips = con.execute("""
     SELECT COUNT(*) AS total_trips,
@@ -40,7 +40,7 @@ def business_overview():
          END AS is_airport_trip
     FROM read_parquet(?)
     GROUP BY is_airport_trip;
-""",[parquet_file_pat]).pl()
+""",[parquet_file_path]).pl()
 
     highest_revenue_location = con.execute("""
     SELECT PULocationID, SUM(total_amount) AS total_revenue
@@ -48,7 +48,18 @@ def business_overview():
     GROUP BY PULocationID
     ORDER BY total_revenue DESC
     LIMIT 1;
-""",[parquet_file_pat]).pl()
+""",[parquet_file_path]).pl()
+    
+    total_revenue = con.execute("""
+    SELECT ROUND(SUM(total_amount),2) AS total_revenue
+    FROM read_parquet(?)
+""",[parquet_file_path]).fetchone()[0]
+
+        
+    avg_distance = con.execute("""
+    SELECT ROUND(AVG(trip_distance * 1.609),2) AS avg_trip_distance_in_km
+    FROM read_parquet(?)
+""",[parquet_file_path]).fetchone()[0]
 
     con.close()
 
@@ -57,7 +68,9 @@ def business_overview():
         "most_common_pu_location": most_common_pu_location,
         "most_common_do_location": most_common_do_location,
         "airport_vs_non_airport_trips": airport_vs_non_airport_trips,
-        "highest_revenue_location": highest_revenue_location
+        "highest_revenue_location": highest_revenue_location,
+        "total_revenue": total_revenue,
+        "avg_distance": avg_distance
     }
 
     

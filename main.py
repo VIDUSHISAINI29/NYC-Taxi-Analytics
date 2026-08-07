@@ -46,8 +46,8 @@ def main():
     Main function to run the data analysis, transformation, and validation.
     """
     analysis()
-    transformation()
-    validation()
+    # transformation()
+    # validation()
 
 
 
