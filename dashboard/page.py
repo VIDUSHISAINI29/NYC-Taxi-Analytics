@@ -4,7 +4,8 @@ from src.analysis.overview import dataset_overview
 from src.analysis.business import business_overview
 from src.analysis.fare import fare_analysis
 
-from components.demandAnalysis import demand_analysis
+from components.demandAnalysis import demand_analysis_component
+from components.vendorAnalysis import vendor_analysis_component
 
 def dashboard_page():
 
@@ -79,4 +80,9 @@ def dashboard_page():
 
     ## demand analysis
 
-    demand_analysis()  
+    demand_analysis_component()  
+
+
+    ## vendor analysis
+
+    vendor_analysis_component()  

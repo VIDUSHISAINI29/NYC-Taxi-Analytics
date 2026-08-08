@@ -1,15 +1,23 @@
 from src.database import get_connection
-from src.config import RAW_DATA
+from src.config import FEATURED_DIR
 
-parquet_file_path = str(RAW_DATA)
+parquet_file_path = str(FEATURED_DIR)
 
 
 def business_overview():
     con = get_connection()
-    
+
     payment_type_stats = con.execute("""
     SELECT
-        payment_type,
+       CASE payment_type
+            WHEN 1 THEN 'Credit Card'
+            WHEN 2 THEN 'Cash'
+            WHEN 3 THEN 'No Charge'
+            WHEN 4 THEN 'Dispute'
+            WHEN 5 THEN 'Unknown'
+            WHEN 6 THEN 'Voided'
+            ELSE 'Other'
+        END AS payment_method,
         COUNT(*) AS total_trips,
         ROUND(AVG(fare_amount), 2) AS average_fare,
         ROUND(AVG(tip_amount), 2) AS average_tip,
@@ -40,7 +48,7 @@ def business_overview():
          ELSE 'Non-Airport Trip'
          END AS is_airport_trip
     FROM read_parquet(?)
-    GROUP BY is_airport_trip;
+    GROUP BY Airport_fee;
 """,[parquet_file_path]).pl()
 
     highest_revenue_location = con.execute("""
