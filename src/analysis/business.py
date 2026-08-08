@@ -22,7 +22,8 @@ def business_overview():
         ROUND(AVG(fare_amount), 2) AS average_fare,
         ROUND(AVG(tip_amount), 2) AS average_tip,
       FROM read_parquet(?)
-    GROUP BY payment_type;
+    GROUP BY payment_type
+    ORDER BY total_trips DESC;
 """,[parquet_file_path]).pl()
     
     most_common_pu_location = con.execute("""

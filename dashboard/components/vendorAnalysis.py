@@ -4,7 +4,6 @@ from src.analysis.vendor import vendor_analysis
 
 def vendor_analysis_component():
 
-    st.divider()
 
     st.subheader("Vendor Performance")
 

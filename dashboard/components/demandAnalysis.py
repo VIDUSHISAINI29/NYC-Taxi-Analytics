@@ -4,8 +4,6 @@ from src.analysis.time import time_analysis
 
 def demand_analysis_component():
 
-    st.divider()
-
     st.subheader("Demand Analysis")
 
     time_data = time_analysis()
