@@ -1,21 +1,21 @@
 from src.database import get_connection
 
-from src.config import RAW_DATA
+from src.config import FEATURED_DIR
 
-parquet_file_path = str(RAW_DATA)
+parquet_file_path = str(FEATURED_DIR)
 
-con = get_connection()
 
 def time_analysis():
+    con = get_connection()
 
     # Trips by Hour
     trips_by_hour = con.execute("""
         SELECT
-            EXTRACT(HOUR FROM tpep_pickup_datetime) AS hour,
+            EXTRACT(HOUR FROM tpep_pickup_datetime) AS pickup_hour,
             COUNT(*) AS total_trips
         FROM read_parquet(?)
-        GROUP BY hour
-        ORDER BY hour
+        GROUP BY pickup_hour
+        ORDER BY pickup_hour
     """, [parquet_file_path]).pl()
 
     # Trips by Weekday

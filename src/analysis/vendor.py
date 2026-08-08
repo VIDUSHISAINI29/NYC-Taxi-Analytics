@@ -4,9 +4,10 @@ from src.config import RAW_DATA
 
 parquet_file_path = str(RAW_DATA)
 
-con = get_connection()
 
 def vendor_analysis():
+    con = get_connection()
+    
     vendor_stats =  con.execute("""
     SELECT 
         COUNT(*) AS total_trips, 

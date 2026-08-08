@@ -2,10 +2,10 @@ from src.config import RAW_DATA
 from src.database import get_connection
 
 parquet_file = str(RAW_DATA)
-get_connection
-con = get_connection()
+
 
 def dataset_overview():
+    con = get_connection()
 # total rows
     total_rows = con.execute("""
     SELECT COUNT(*) AS total_rows FROM read_parquet(?)

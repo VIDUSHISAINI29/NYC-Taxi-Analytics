@@ -3,9 +3,10 @@ from src.database import get_connection
 from src.config import FEATURED_DIR
 
 parquet_file = str(FEATURED_DIR)
-con = get_connection()
 
 def fare_analysis():
+    con = get_connection()
+    
     fare_data = con.execute("""
     SELECT
     AVG(fare_amount) AS average_fare,
